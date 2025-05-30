@@ -344,7 +344,7 @@ export const extractGroupMetadata = (result: BinaryNode) => {
 	const memberAddMode = getBinaryNodeChildString(group, 'member_add_mode') === 'all_member_add'
 	const metadata: GroupMetadata = {
 		id: groupId,
-		addressingMode: group.attrs.addressing_mode as 'pn' | 'lid',
+		addressingMode: group.attrs.addressing_mode as "pn" | "lid",
 		subject: group.attrs.subject,
 		subjectOwner: group.attrs.s_o,
 		subjectOwnerPn: group.attrs.s_o_pn ? jidNormalizedUser(group.attrs.s_o_pn) : undefined,
