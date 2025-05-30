@@ -1,3 +1,4 @@
+
 import Long = require('long');
 import { Boom } from '@hapi/boom'
 import { randomBytes } from 'crypto'
@@ -906,6 +907,10 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 			signalRepository,
 			logger,
 		)
+
+		if(response && msg?.messageStubParameters?.[0] === NO_MESSAGE_FOUND_ERROR_TEXT) {
+			msg.messageStubParameters = [NO_MESSAGE_FOUND_ERROR_TEXT, response]
+		}
 
 		if(msg.message?.protocolMessage?.type === proto.Message.ProtocolMessage.Type.SHARE_PHONE_NUMBER && node.attrs.sender_pn) {
 			ev.emit('chats.phoneNumberShare', { lid: node.attrs.from, jid: node.attrs.sender_pn })
