@@ -362,7 +362,9 @@ export const generateWAMessageContent = async(
 			extContent.font = options.font
 		}
 
-		m.extendedTextMessage = extContent
+		m.messageContextInfo = {
+			messageSecret: randomBytes(32)
+	}
 	} else if('contacts' in message) {
 		const contactLen = message.contacts.contacts.length
 		if(!contactLen) {
