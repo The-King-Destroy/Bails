@@ -1,7 +1,7 @@
 import { proto } from '../../WAProto'
 import { GroupMetadata, GroupParticipant, ParticipantAction, SocketConfig, WAMessageKey, WAMessageStubType } from '../Types'
 import { generateMessageIDV2, unixTimestampSeconds } from '../Utils'
-import { areJidsSameUser, BinaryNode, getBinaryNodeChild, getBinaryNodeChildren, getBinaryNodeChildString, jidEncode, jidNormalizedUser } from '../WABinary'
+import { BinaryNode, getBinaryNodeChild, getBinaryNodeChildren, getBinaryNodeChildString, jidEncode, jidNormalizedUser } from '../WABinary'
 import { makeChatsSocket } from './chats'
 
 export const makeGroupsSocket = (config: SocketConfig) => {
@@ -344,7 +344,7 @@ export const extractGroupMetadata = (result: BinaryNode) => {
 	const memberAddMode = getBinaryNodeChildString(group, 'member_add_mode') === 'all_member_add'
 	const metadata: GroupMetadata = {
 		id: groupId,
-		addressingMode: group.attrs.addressing_mode as "pn" | "lid",
+		addressingMode: group.attrs.addressing_mode as 'pn' | 'lid',
 		subject: group.attrs.subject,
 		subjectOwner: group.attrs.s_o,
 		subjectOwnerPn: group.attrs.s_o_pn ? jidNormalizedUser(group.attrs.s_o_pn) : undefined,
@@ -368,10 +368,10 @@ export const extractGroupMetadata = (result: BinaryNode) => {
 		participants: getBinaryNodeChildren(group, 'participant').map(
 			({ attrs }) => {
 				return {
-					id: jidNormalizedUser(attrs.jid),
-					phoneNumber: jidNormalizedUser(attrs.phone_number || attrs.jid),
+					id: attrs.phone_number || attrs.jid,
+					lid: attrs.lid || attrs.jid,
 					admin: (attrs.type || null) as GroupParticipant['admin'],
-				};
+				}
 			}
 		),
 		ephemeralDuration: eph ? +eph : undefined
